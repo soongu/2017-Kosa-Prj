@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:mvc="http://www.springframework.org/schema/mvc"
+   xmlns:context="http://www.springframework.org/schema/context"
+   xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+      http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+   <context:component-scan base-package="com.coderby.myapp.hr.controller"/>
+   
+   <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+
+   <mvc:annotation-driven validator="validator"/>
+   
+   <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+      <property name="prefix" value="/WEB-INF/views/"/>
+      <property name="suffix" value=".jsp"/>
+   </bean>
+   
+  
+   
+   <mvc:resources location="/WEB-INF/resources/" mapping="/**" />
+   <mvc:resources location="/WEB-INF/resources/images/" mapping="/images/**"/>
+   <mvc:resources location="/WEB-INF/resources/js/" mapping="/js/**"/>
+   <mvc:resources location="/WEB-INF/resources/css/" mapping="/css/**"/>
+
+   
+
+	
+	<mvc:view-controller path="/" view-name="home" />
+	<!--  <mvc:view-controller path="/hr/welcome" view-name="hr/welcome" />  -->
+	
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/hr/welcome"/>
+			<mvc:mapping path="/hr/update"/>			
+			<mvc:mapping path="/hr/delete"/>			
+			<mvc:mapping path="/hr/list"/>
+			
+			<bean class="com.coderby.myapp.common.LoginInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+</beans>
