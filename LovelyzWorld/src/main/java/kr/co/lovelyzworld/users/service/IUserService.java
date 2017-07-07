@@ -10,4 +10,7 @@ public interface IUserService {
 	//회원가입
 	void signUp(Users user);
 	
+	//ID 추출
+	Users selectUserByUserId(String userId);
+	
 }

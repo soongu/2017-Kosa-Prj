@@ -9,4 +9,7 @@ public interface IUserRepository {
 	
 	//회원가입
 	void signUp(Users user);
+	
+	//ID 추출
+	Users selectUserByUserId(String userId);
 }

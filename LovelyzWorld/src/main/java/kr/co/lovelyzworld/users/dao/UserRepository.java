@@ -52,4 +52,12 @@ public class UserRepository implements IUserRepository {
 				);
 	}
 
+	@Override
+	public Users selectUserByUserId(String userId) {
+		String sql = "select * from love_users where user_id=?";
+		return jdbcTemplate.queryForObject(sql, new UserMapper(), userId);
+	}
+	
+	
+
 }

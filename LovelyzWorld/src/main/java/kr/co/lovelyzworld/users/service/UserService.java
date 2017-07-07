@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kr.co.lovelyzworld.users.dao.IUserRepository;
-import kr.co.lovelyzworld.users.dao.UserRepository;
 import kr.co.lovelyzworld.users.model.Users;
 
 @Service
@@ -27,5 +26,12 @@ public class UserService implements IUserService {
 	public void signUp(Users user) {
 		userRepository.signUp(user);
 	}
+
+	@Override
+	public Users selectUserByUserId(String userId) {
+		return userRepository.selectUserByUserId(userId);
+	}
+	
+	
 
 }

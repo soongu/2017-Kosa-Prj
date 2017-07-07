@@ -1,6 +1,7 @@
 package kr.co.lovelyzworld.users.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,15 @@ public class UserController {
 	@Autowired
 	IUserService userService;
 	
+	
+	//jsp 파일에서 ${} 사용을 위한 모델 생성.
+	public Model callNameModel(String userId, Model model) {
+		Users user = userService.selectUserByUserId(userId);
+		String userName = user.getUserName();
+		model.addAttribute("userName", userName);
+		return model;
+	}
+	
 	//에러 예외처리
 		static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -41,13 +51,13 @@ public class UserController {
 	@RequestMapping(value="/signup", method=RequestMethod.GET)
 	public String signUp(Model model) {
 		model.addAttribute("users", new Users());
-		return "users/insertfrom";
+		return "/";
 	}
 	
 	@RequestMapping(value="/signup", method=RequestMethod.POST)
 	public String signUp(@ModelAttribute("users") Users user, BindingResult result, Model model, RedirectAttributes redirectAttrs) {
 		if(result.hasErrors()) {
-			return "users/insertform";
+			return "/";
 		}
 		try {
 			userService.signUp(user);
@@ -57,5 +67,37 @@ public class UserController {
 		return "redirect:/";
 	}
 	
+	//로그인
+	@RequestMapping(value="/login", method=RequestMethod.GET)
+	public String signIn() {
+		return "/users/welcome";
+	}
+	
+	@RequestMapping(value="/login", method=RequestMethod.POST)
+	public String signIn(String userId, String userPw, HttpSession session, Model model) {
+		try {
+			Users user = userService.selectUserByUserId(userId);
+			callNameModel(userId, model);
+			model.addAttribute("users", user);
+			
+			if(userService.checkPassword(userId, userPw)) {
+				session.setAttribute("userId", userId);
+				return "users/welcome";
+			}else {
+				session.invalidate();
+				return "users/PwWrong";
+			}
+		}catch (Exception e) {
+			return "users/IdWrong";
+		}
+	}
+	
+	//로그아웃
+	//로그아웃
+		@RequestMapping("/logout")
+		public String logout(HttpSession session) {		
+			session.invalidate();
+			return "redirect:/";
+		}
 
 }
