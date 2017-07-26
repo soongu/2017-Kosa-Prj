@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.javaspecialist.upload.dao.UploadRepository">
+
+	<insert id="uploadFile" parameterType="kr.co.javaspecialist.upload.model.UploadFile">
+	<![CDATA[
+		INSERT INTO 
+		UPLOAD_FILE 
+			(DIRECTORY_NAME, FILE_NAME, FILE_SIZE, FILE_CONTENT_TYPE, FILE_UPLOAD_DATE, FILE_DATA) 
+		VALUES 
+			(#{directoryName}, #{fileName}, #{fileSize}, #{fileContentType}, SYSDATE(), #{fileData} )
+	]]>
+	</insert>
+
+	<select id="getImageList" parameterType="string" resultType="kr.co.javaspecialist.upload.model.UploadFile">
+	<![CDATA[
+		SELECT 
+			FILE_ID				AS "fileId", 
+			DIRECTORY_NAME		AS "directoryName", 
+			FILE_NAME			AS "fileName", 
+			FILE_SIZE			AS "fileSize", 
+			FILE_CONTENT_TYPE	AS "fileContentType", 
+			FILE_DATA 			AS "fileData"
+		FROM UPLOAD_FILE 
+		WHERE DIRECTORY_NAME=#{directoryName}
+	]]>
+	</select>
+
+	<select id="getFileList" parameterType="string" resultType="kr.co.javaspecialist.upload.model.UploadFile">
+	<![CDATA[
+		SELECT 
+			FILE_ID				AS "fileId", 
+			DIRECTORY_NAME		AS "directoryName", 
+			FILE_NAME			AS "fileName", 
+			FILE_SIZE			AS "fileSize", 
+			FILE_CONTENT_TYPE	AS "fileContentType",
+			FILE_UPLOAD_DATE	AS "fileUploadDate"  
+		FROM UPLOAD_FILE 
+		WHERE DIRECTORY_NAME=#{directoryName}
+		ORDER BY FILE_UPLOAD_DATE DESC
+	]]>
+	</select>
+
+	<select id="getAllFileList" resultType="kr.co.javaspecialist.upload.model.UploadFile">
+	<![CDATA[
+		SELECT 
+			FILE_ID				AS "fileId", 
+			DIRECTORY_NAME		AS "directoryName", 
+			FILE_NAME			AS "fileName", 
+			FILE_SIZE			AS "fileSize", 
+			FILE_CONTENT_TYPE	AS "fileContentType",
+			FILE_UPLOAD_DATE	AS "fileUploadDate" 
+		FROM UPLOAD_FILE
+		ORDER BY FILE_UPLOAD_DATE DESC
+	]]>
+	</select>
+				
+	<select id="getFile" parameterType="int" resultType="kr.co.javaspecialist.upload.model.UploadFile">
+	<![CDATA[
+		SELECT 
+			FILE_ID				AS "fileId", 
+			DIRECTORY_NAME		AS "directoryName", 
+			FILE_NAME			AS "fileName", 
+			FILE_SIZE			AS "fileSize", 
+			FILE_CONTENT_TYPE	AS "fileContentType", 
+			FILE_DATA 			AS "fileData"
+		FROM UPLOAD_FILE 
+		WHERE FILE_ID=#{fileId}
+	]]>
+	</select>
+
+	<delete id="deleteFile" parameterType="int">
+	<![CDATA[
+		DELETE FROM UPLOAD_FILE 
+		WHERE FILE_ID=#{fileId} 
+	]]>
+	</delete>
+
+	<select id="getDirectoryName" parameterType="int" resultType="string">
+	<![CDATA[
+		SELECT 
+			DIRECTORY_NAME		AS "directoryName"
+		FROM UPLOAD_FILE 
+		WHERE FILE_ID=#{fileId}
+	]]>
+	</select>
+	
+	<update id="updateDirectory" parameterType="hashmap">
+	<![CDATA[
+		UPDATE UPLOAD_FILE
+		SET DIRECTORY_NAME=#{directoryName} 
+		WHERE FILE_ID=#{fileId} 
+	]]>
+	</update>
+	
+	<update id="updateUploadedFile" parameterType="kr.co.javaspecialist.upload.model.UploadFile">
+	<![CDATA[
+		UPDATE UPLOAD_FILE
+		SET DIRECTORY_NAME=#{directoryName}, FILE_NAME=#{fileName}, FILE_SIZE=#{fileSize}, FILE_CONTENT_TYPE=#{fileContentType}, FILE_DATA=#{fileData} 
+		WHERE FILE_ID=#{fileId}
+	]]>
+	</update>
+</mapper>
+
