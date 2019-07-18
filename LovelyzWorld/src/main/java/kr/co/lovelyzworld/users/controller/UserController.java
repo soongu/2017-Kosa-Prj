@@ -25,6 +25,7 @@ public class UserController {
 	@Autowired
 	IUserService userService;
 	
+	//주석추가~~
 	
 	//jsp 파일에서 ${} 사용을 위한 모델 생성.
 	public Model callNameModel(String userId, Model model) {
